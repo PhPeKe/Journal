@@ -4,25 +4,25 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title_detailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/mood_detailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/content_detailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/timestamp_detailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
