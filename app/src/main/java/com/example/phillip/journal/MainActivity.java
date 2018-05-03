@@ -15,6 +15,8 @@ import java.io.Serializable;
 public class MainActivity extends Activity {
     Intent intent;
     ListView list;
+    private EntryDatabase db;
+    private EntryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,19 +27,20 @@ public class MainActivity extends Activity {
         list = findViewById(R.id.listView);
 
         // Get database
-        EntryDatabase db = EntryDatabase.getInstance(getApplicationContext());
+        db = EntryDatabase.getInstance(getApplicationContext());
 
         // Get cursor
         Cursor cursor = db.selectAll();
 
         // Prepare adapter
-        EntryAdapter adapter = new EntryAdapter(this, cursor);
+        adapter = new EntryAdapter(this, cursor);
 
         // Pair adapter and list-view#
         list.setAdapter(adapter);
 
         // Pair list-view with listener
         list.setOnItemClickListener(new ListClickListener());
+        list.setOnItemLongClickListener(new ListLongClickListener());
     }
 
     public void floatClick(View view) {
@@ -51,11 +54,57 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            JournalEntry clickedEntry = (JournalEntry) parent.getItemAtPosition(position);
-            intent = new Intent(MainActivity.this, DetailActivity.class);
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+
+            Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+            JournalEntry clickedEntry = new JournalEntry();
+
+            String mood = cursor.getString(cursor.getColumnIndex("mood"));
+            String title = cursor.getString(cursor.getColumnIndex("title"));
+            String content = cursor.getString(cursor.getColumnIndex("content"));
+            String stamp = cursor.getString(cursor.getColumnIndex("stamp"));
+
+            clickedEntry.setMood(cursor.getString(cursor.getColumnIndex("mood")));
+            clickedEntry.setContent(cursor.getString(cursor.getColumnIndex("content")));
+            clickedEntry.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            clickedEntry.setTimestamp(cursor.getString(cursor.getColumnIndex("stamp")));
+
             intent.putExtra("clickedEntry", clickedEntry);
             startActivity(intent);
         }
     }
 
+    private class ListLongClickListener implements ListView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            // Get appropriate Journal Entry
+            Cursor clickedEntry = (Cursor) parent.getItemAtPosition(position);
+
+            // Get index, then id, the cast to long
+            int titleIndex = clickedEntry.getColumnIndex("_id");
+            String stringId = clickedEntry.getString(titleIndex);
+            Long deleteId = Long.parseLong(stringId);
+
+            // Get instance of database and delete entry, update list-view
+            db = EntryDatabase.getInstance(getApplicationContext());
+            db.delete(deleteId);
+            updateData();
+
+            return true;
+        }
+    }
+
+    public void updateData() {
+
+        // Get cursor and swap it
+        Cursor cursor = db.selectAll();
+        adapter.swapCursor(cursor);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateData();
+    }
 }

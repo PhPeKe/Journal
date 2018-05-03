@@ -10,17 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="35dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/mood_detailed"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/mood_detailed"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="85dp"
+        android:layout_marginBottom="46dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/content_detailed" />
@@ -28,8 +30,8 @@
     <TextView
         android:id="@+id/content_detailed"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginBottom="43dp"
+        android:layout_height="79dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/timestamp_detailed"
@@ -39,7 +41,7 @@
         android:id="@+id/timestamp_detailed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="46dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"

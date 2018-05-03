@@ -13,7 +13,7 @@ import java.util.Map;
 public class EntryDatabase extends SQLiteOpenHelper {
     private static EntryDatabase instance;
     private static final String DB_NAME = "entry";
-    private static int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
 
 
     private EntryDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -22,8 +22,8 @@ public class EntryDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Create table entry
         db.execSQL("CREATE TABLE entry (_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, mood TEXT, stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
-        db.execSQL("INSERT INTO entry (title, content, mood) VALUES ('itsaTitle', 'testContent', 'testMood');");
     }
 
     @Override
@@ -42,12 +42,15 @@ public class EntryDatabase extends SQLiteOpenHelper {
     }
 
     public Cursor selectAll() {
+        // Get database, save cursor retrieved through query and return it
         SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM entry",null);
+        //Cursor cursor = db.rawQuery("SELECT * FROM entry",null);
+        Cursor cursor = db.rawQuery("SELECT _id, title, content, mood, (strftime('%Y-%m-%d %H:%M:%S', stamp)) AS stamp FROM entry",null);
         return cursor;
     }
 
     public void insert(JournalEntry entry) {
+
         // Get database connection
         SQLiteDatabase db = getWritableDatabase();
 
@@ -60,17 +63,17 @@ public class EntryDatabase extends SQLiteOpenHelper {
         // Insert entry into database
         db.insert(DB_NAME, null, insertValues);
 
-/*
-        // Initialize content and fill it with data from the entry
-        //ContentValues content = null;
-        String title = entry.getTitle();
-        String mood = entry.getMood();
-        String contents = entry.getContent();
-*/
-        // Make String array for input
-        //String[] input = new String[] {title, contents, mood};
+    }
 
-        //db.execSQL("INSERT INTO entry (title, content, mood) VALUES (title = ?, content = ?, mood = ?)", input);
-        }
+    public void delete(long id) {
+        // Parse long to string for db search
+        String searchId = String.valueOf(id);
 
+        // Get database connection
+        SQLiteDatabase db = getWritableDatabase();
+
+        // Delete entry with id searchId from database
+        db.execSQL("DELETE FROM entry WHERE _id == " + searchId);
+
+    }
 }

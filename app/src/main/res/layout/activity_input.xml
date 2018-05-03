@@ -83,8 +83,8 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:gravity="center"
-        android:inputType="textPersonName"
         android:text="Elaborate"
+        android:inputType="textMultiLine"
         app:layout_constraintTop_toBottomOf="@+id/title_input"
         tools:layout_editor_absoluteX="0dp" />
 

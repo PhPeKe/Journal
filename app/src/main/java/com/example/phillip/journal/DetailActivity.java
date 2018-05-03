@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class DetailActivity extends Activity {
-    public EntryDatabase retrievedEntry;
+    public JournalEntry retrievedEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,12 +14,15 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = getIntent();
-        retrievedEntry = (EntryDatabase) intent.getSerializableExtra("clickedEntry");
+        retrievedEntry = (JournalEntry) intent.getSerializableExtra("clickedEntry");
 
         TextView title = findViewById(R.id.title_detailed);
+        title.setText(retrievedEntry.getTitle());
 
         TextView mood = findViewById(R.id.mood_detailed);
+        mood.setText(retrievedEntry.getMood());
 
         TextView content = findViewById(R.id.content_detailed);
+        content.setText(retrievedEntry.getContent());
     }
 }

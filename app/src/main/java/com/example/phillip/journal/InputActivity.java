@@ -1,6 +1,8 @@
 package com.example.phillip.journal;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,28 +33,48 @@ public class InputActivity extends Activity {
         System.out.println(entry.getTitle());
 
         // If mood buttons weren't clicked it is set to not specified
-        if (mood != null) entry.setMood(mood);
-        else mood = "not specified";
+        if (mood != null) {
+            entry.setMood(mood);
+        } else {
+            mood = "not specified";
+        }
 
         // Get instance of database
         EntryDatabase db = EntryDatabase.getInstance(getApplicationContext());
 
         // Insert entry
         db.insert(entry);
+
+        // Go back to main
+        Intent intent = new Intent(InputActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void moodClicked(View view) {
         // On click listener for mood buttons that stores appropriate mood in variable mood
         String buttonText = (String)((Button)view).getText();
+
+        Button happy = findViewById(R.id.happy);
+        Button sad = findViewById(R.id.sad);
+        Button indifferent = findViewById(R.id.indifferent);
+
+        // Reset all colors
+        happy.setTextColor(Color.BLACK);
+        sad.setTextColor(Color.BLACK);
+        indifferent.setTextColor(Color.BLACK);
+
         switch(buttonText) {
             case ":-)":
                 mood = "happy";
+                happy.setTextColor(Color.RED);
                 break;
             case ":-|":
                 mood = "indifferent";
+                indifferent.setTextColor(Color.RED);
                 break;
             case ":-(":
                 mood = "sad";
+                sad.setTextColor(Color.RED);
                 break;
         }
     }

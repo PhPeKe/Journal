@@ -8,12 +8,12 @@ public class JournalEntry implements Serializable{
     private String title;
     private String content;
     private String mood;
-    private Date timestamp;
+    private String timestamp;
 
     public JournalEntry() {
     }
 
-    public JournalEntry(int id, String title, String content, String mood, Date timestamp) {
+    public JournalEntry(int id, String title, String content, String mood, String timestamp) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -53,11 +53,11 @@ public class JournalEntry implements Serializable{
         this.mood = mood;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 }
