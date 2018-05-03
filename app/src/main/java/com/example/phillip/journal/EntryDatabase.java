@@ -5,16 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.DropBoxManager;
 
+import java.security.KeyStore;
 import java.util.Map;
 
 public class EntryDatabase extends SQLiteOpenHelper {
     private static EntryDatabase instance;
-    private String testTitle = "Title";
-    private String testContent = "Title";
-    private String testMood = "Title";
-    private String testStamp = "30-03-1993";
-    public int version;
+    private static final String DB_NAME = "entry";
+    private static int DB_VERSION = 1;
 
 
     private EntryDatabase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -23,14 +22,13 @@ public class EntryDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        version = db.getVersion();
         db.execSQL("CREATE TABLE entry (_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, mood TEXT, stamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP);");
         db.execSQL("INSERT INTO entry (title, content, mood) VALUES ('itsaTitle', 'testContent', 'testMood');");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + "entry");
+        db.execSQL("DROP TABLE IF EXISTS " + DB_NAME);
         onCreate(db);
     }
 
@@ -39,7 +37,7 @@ public class EntryDatabase extends SQLiteOpenHelper {
         if (instance != null) {
             return instance;
         } else {
-            return instance = new EntryDatabase(context,"entry", null, 1); //------->KLOPT misschien!!!
+            return instance = new EntryDatabase(context,DB_NAME, null, DB_VERSION);
         }
     }
 
@@ -53,18 +51,26 @@ public class EntryDatabase extends SQLiteOpenHelper {
         // Get database connection
         SQLiteDatabase db = getWritableDatabase();
 
+        // Put objects in ContentValues object
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("title", entry.getTitle());
+        insertValues.put("mood", entry.getMood());
+        insertValues.put("content", entry.getContent());
+
+        // Insert entry into database
+        db.insert(DB_NAME, null, insertValues);
+
+/*
         // Initialize content and fill it with data from the entry
         //ContentValues content = null;
         String title = entry.getTitle();
         String mood = entry.getMood();
-        String content = entry.getContent();
-        /*
-        content.put("title", entry.getTitle());
-        content.put("mood", entry.getMood());
-        content.put("content", entry.getContent());
+        String contents = entry.getContent();
 */
-        // Insert entry into database
-        db.execSQL("INSERT INTO entry (title, content, mood) VALUES (title = ?, content = ?, mood = ?)", new String[] {title, content, mood});
-    }
+        // Make String array for input
+        //String[] input = new String[] {title, contents, mood};
+
+        //db.execSQL("INSERT INTO entry (title, content, mood) VALUES (title = ?, content = ?, mood = ?)", input);
+        }
 
 }

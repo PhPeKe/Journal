@@ -10,6 +10,9 @@ public class JournalEntry implements Serializable{
     private String mood;
     private Date timestamp;
 
+    public JournalEntry() {
+    }
+
     public JournalEntry(int id, String title, String content, String mood, Date timestamp) {
         this.id = id;
         this.title = title;

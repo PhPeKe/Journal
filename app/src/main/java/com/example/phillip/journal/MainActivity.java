@@ -35,6 +35,9 @@ public class MainActivity extends Activity {
 
         // Pair adapter and list-view#
         list.setAdapter(adapter);
+
+        // Pair list-view with listener
+        list.setOnItemClickListener(new ListClickListener());
     }
 
     public void floatClick(View view) {
